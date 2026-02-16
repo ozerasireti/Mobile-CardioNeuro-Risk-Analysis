@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mobile Cardio-Neuro Risk Analysis</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+    margin:0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:#fff;
+}
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:40px 20px;
+}
+h1{
+    text-align:center;
+    font-size:38px;
+    margin-bottom:10px;
+}
+.subtitle{
+    text-align:center;
+    opacity:.85;
+    margin-bottom:40px;
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+.card{
+    background:rgba(255,255,255,.1);
+    padding:25px;
+    border-radius:16px;
+    backdrop-filter: blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+.card h2{
+    margin-top:0;
+    color:#4fd1ff;
+}
+.card p, li{
+    line-height:1.6;
+    color:#e6f4ff;
+}
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    background:#4fd1ff;
+    color:#0f2027;
+    cursor:pointer;
+    font-weight:bold;
+}
+button:hover{
+    background:#38bdf8;
+}
+.result{
+    margin-top:15px;
+    font-weight:bold;
+    font-size:18px;
+}
+.footer{
+    margin-top:40px;
+    text-align:center;
+    font-size:14px;
+    opacity:.7;
+}
+.warning{
+    color:#ffb703;
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Mobile Cardio-Neuro<br>Early Risk Analysis</h1>
+<p class="subtitle">
+Wearable ECG & signal-based preliminary health risk assessment
+</p>
+
+<div class="grid">
+
+<div class="card">
+<h2>🎯 Project Aim</h2>
+<p>
+To analyze early cardiovascular and neurological risk indicators 
+using ECG data obtained from wearable devices and signal processing algorithms.
+</p>
+</div>
+
+<div class="card">
+<h2>🧠 System Workflow</h2>
+<p>
+User → Wearable ECG → Image Processing → Signal Analysis → Risk Scoring → Result
+</p>
+</div>
+
+<div class="card">
+<h2>⚙️ Technologies</h2>
+<ul>
+<li>Python & OpenCV</li>
+<li>Signal Processing Logic</li>
+<li>Wearable ECG Data</li>
+<li>GitHub Version Control</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>📊 ECG Analysis Demo</h2>
+<p>Simulated rhythm regularity analysis</p>
+<button onclick="analyze()">Run Demo Analysis</button>
+<div id="demoResult" class="result"></div>
+</div>
+
+</div>
+
+<div class="card" style="margin-top:30px">
+<p class="warning">
+⚠️ This system does NOT provide medical diagnosis.<br>
+It is designed for early risk indication and academic research purposes.
+</p>
+</div>
+
+<div class="footer">
+Developed as a TÜBİTAK Project Proposal · GitHub Pages Demo
+</div>
+
+</div>
+
+<script>
+function analyze(){
+    let r=Math.random();
+    let txt="";
+    if(r<0.4){
+        txt="Low Risk — Regular ECG rhythm detected";
+    }else if(r<0.7){
+        txt="Moderate Risk — Slight rhythm irregularity";
+    }else{
+        txt="High Risk — Irregular rhythm indicator";
+    }
+    document.getElementById("demoResult").innerHTML=txt;
+}
+</script>
+
+</body>
+</html>
