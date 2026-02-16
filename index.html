@@ -2,45 +2,73 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Mobil Kardiyo-Nöro Risk Analiz Sistemi</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZGL CardioNeuro v1.0</title>
 
 <style>
+:root{
+    --primary:#1e3a8a;
+    --accent:#2563eb;
+    --bg:#f1f5f9;
+    --card:#ffffff;
+}
+
 body{
-    font-family: Arial, sans-serif;
-    background:#f1f5f9;
     margin:0;
-    padding:0;
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:var(--bg);
 }
 
 header{
-    background:#1e3a8a;
+    background:linear-gradient(135deg,#1e3a8a,#2563eb);
     color:white;
-    padding:30px;
     text-align:center;
+    padding:40px 20px;
+}
+
+header h1{
+    margin:0;
+    font-size:2em;
+}
+
+header p{
+    margin-top:8px;
+    opacity:0.95;
 }
 
 .container{
-    max-width:900px;
+    max-width:950px;
     margin:30px auto;
     padding:20px;
 }
 
 .card{
-    background:white;
-    padding:20px;
-    margin-bottom:20px;
-    border-radius:10px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    background:var(--card);
+    padding:25px;
+    margin-bottom:25px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.card h2{
+    margin-top:0;
+    color:#1e3a8a;
+}
+
+input{
+    margin-top:10px;
 }
 
 button{
-    padding:10px 20px;
-    background:#2563eb;
-    color:white;
+    margin-top:15px;
+    padding:12px 30px;
     border:none;
-    border-radius:5px;
+    border-radius:30px;
+    background:var(--accent);
+    color:white;
+    font-size:15px;
     cursor:pointer;
+    transition:0.2s;
 }
 
 button:hover{
@@ -49,51 +77,78 @@ button:hover{
 
 img{
     max-width:100%;
-    margin-top:15px;
+    margin-top:20px;
     border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
 }
 
 #result{
-    margin-top:15px;
+    margin-top:20px;
     font-size:18px;
-    font-weight:bold;
+    font-weight:600;
 }
+
 .low{color:green;}
-.mid{color:orange;}
-.high{color:red;}
+.mid{color:#d97706;}
+.high{color:#dc2626;}
+
+footer{
+    text-align:center;
+    padding:25px;
+    background:#0f172a;
+    color:white;
+    margin-top:40px;
+    font-size:14px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>Mobil Kardiyo-Nöro Risk Analizi</h1>
-<p>TÜBİTAK Projesi • Ziya Gökalp Anadolu Lisesi</p>
+    <h1>ZGL CardioNeuro v1.0</h1>
+    <p>Ziya Gökalp Anadolu Lisesi • TÜBİTAK Proje Taslağı</p>
 </header>
 
 <div class="container">
 
 <div class="card">
 <h2>EKG Görseli Yükle</h2>
+<p>Lütfen akıllı saat veya EKG çıktısını yükleyiniz.</p>
 
 <input type="file" id="imageUpload" accept="image/*">
-<br><br>
-<button onclick="analyzeImage()">Analiz Et</button>
+<br>
+<button onclick="analyzeImage()">Analizi Başlat</button>
 
 <canvas id="canvas" style="display:none;"></canvas>
 <img id="preview">
 <div id="result"></div>
-
 </div>
 
 <div class="card">
-<h3>Etik Uyarı</h3>
-<p style="color:red;">
-Bu sistem tıbbi tanı koymaz. Eğitim amaçlı erken risk göstergesi sunar.
+<h2>Sistem Açıklaması</h2>
+<p>
+Bu sistem, yüklenen EKG görüntüsünü piksel yoğunluğu ve kenar değişim analizi ile inceleyerek
+ritim düzensizliği göstergesi üretir. Klinik teşhis amacı taşımaz.
 </p>
 </div>
 
 </div>
+
+<footer>
+    <div style="font-weight:600; font-size:16px;">
+        ZGL CardioNeuro v1.0
+    </div>
+    <div style="margin-top:8px;">
+        Hazırlayan: <strong>Muhammed Ekrem Özer</strong>
+    </div>
+    <div>
+        Sınıf: 9-C
+    </div>
+    <div style="margin-top:10px; opacity:0.7;">
+        © 2026 Ziya Gökalp Anadolu Lisesi
+    </div>
+</footer>
 
 <script>
 
@@ -110,6 +165,11 @@ document.getElementById("imageUpload").addEventListener("change", function(event
 
 function analyzeImage(){
 
+    if(!uploadedImage.src){
+        alert("Lütfen önce bir görsel yükleyiniz.");
+        return;
+    }
+
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
@@ -121,42 +181,37 @@ function analyzeImage(){
     const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
     const data = imageData.data;
 
-    let brightnessSum = 0;
     let edgeScore = 0;
 
-    for(let i=0; i<data.length; i+=4){
-        let gray = (data[i] + data[i+1] + data[i+2]) / 3;
-        brightnessSum += gray;
-
-        if(i > 4){
-            let prevGray = (data[i-4] + data[i-3] + data[i-2]) / 3;
-            edgeScore += Math.abs(gray - prevGray);
-        }
+    for(let i=4; i<data.length; i+=4){
+        let grayCurrent = (data[i] + data[i+1] + data[i+2]) / 3;
+        let grayPrev = (data[i-4] + data[i-3] + data[i-2]) / 3;
+        edgeScore += Math.abs(grayCurrent - grayPrev);
     }
 
-    let avgBrightness = brightnessSum / (data.length/4);
-    let normalizedEdge = edgeScore / (data.length/4);
+    let normalizedScore = edgeScore / (data.length/4);
 
-    let resultText = "";
-    let resultClass = "";
+    let resultText="";
+    let resultClass="";
 
-    if(normalizedEdge < 15){
-        resultText = "Düşük Risk – Düzenli Sinyal Yapısı";
-        resultClass = "low";
-    } 
-    else if(normalizedEdge < 30){
-        resultText = "Orta Risk – Olası Ritim Düzensizliği";
-        resultClass = "mid";
-    } 
+    if(normalizedScore < 15){
+        resultText="Düşük Risk – Düzenli Ritim Göstergesi";
+        resultClass="low";
+    }
+    else if(normalizedScore < 30){
+        resultText="Orta Risk – Olası Ritim Düzensizliği";
+        resultClass="mid";
+    }
     else{
-        resultText = "Yüksek Risk – Belirgin Sinyal Dalgalanması";
-        resultClass = "high";
+        resultText="Yüksek Risk – Belirgin Dalga Düzensizliği";
+        resultClass="high";
     }
 
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = resultText +
-        "<br><small>Analiz Skoru: " + normalizedEdge.toFixed(2) + "</small>";
-    resultDiv.className = resultClass;
+    document.getElementById("result").innerHTML =
+        resultText + "<br><small>Analiz Skoru: " +
+        normalizedScore.toFixed(2) + "</small>";
+
+    document.getElementById("result").className = resultClass;
 }
 
 </script>
