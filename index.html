@@ -6,197 +6,159 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-:root{
-    --primary:#1e3a8a;
-    --secondary:#2563eb;
-    --bg:#f1f5f9;
-    --card:#ffffff;
-    --text:#0f172a;
-}
-
 body{
+    font-family: Arial, sans-serif;
+    background:#f1f5f9;
     margin:0;
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
-    background:var(--bg);
-    color:var(--text);
+    padding:0;
 }
 
 header{
-    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    background:#1e3a8a;
     color:white;
-    padding:50px 20px;
+    padding:30px;
     text-align:center;
-}
-
-header h1{
-    margin:0;
-    font-size:2.2em;
-}
-
-header p{
-    margin-top:10px;
-    opacity:0.95;
 }
 
 .container{
-    max-width:1000px;
-    margin:40px auto;
-    padding:0 20px;
+    max-width:900px;
+    margin:30px auto;
+    padding:20px;
 }
 
 .card{
-    background:var(--card);
-    border-radius:12px;
-    padding:25px;
-    margin-bottom:25px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.08);
-}
-
-.card h2{
-    margin-top:0;
-    color:var(--primary);
-}
-
-.flow{
-    font-weight:600;
-    text-align:center;
-    background:#e0e7ff;
-    padding:15px;
-    border-radius:8px;
-}
-
-.demo{
-    text-align:center;
+    background:white;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 button{
-    background:var(--secondary);
+    padding:10px 20px;
+    background:#2563eb;
     color:white;
     border:none;
-    padding:12px 30px;
-    font-size:16px;
-    border-radius:30px;
+    border-radius:5px;
     cursor:pointer;
-    transition:0.2s;
 }
 
 button:hover{
-    background:var(--primary);
+    background:#1e40af;
 }
-
-#result{
-    margin-top:20px;
-    font-size:18px;
-    font-weight:600;
-}
-
-.low{ color:green; }
-.mid{ color:#d97706; }
-.high{ color:#dc2626; }
 
 img{
     max-width:100%;
-    border-radius:10px;
     margin-top:15px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    border-radius:10px;
 }
 
-footer{
-    text-align:center;
-    padding:25px;
-    font-size:14px;
-    opacity:0.7;
+#result{
+    margin-top:15px;
+    font-size:18px;
+    font-weight:bold;
 }
+.low{color:green;}
+.mid{color:orange;}
+.high{color:red;}
 </style>
 </head>
 
 <body>
 
 <header>
-    <h1>Mobil Kardiyo-Nöro Erken Risk Analiz Sistemi</h1>
-    <p>
-        TÜBİTAK Proje Çalışması<br>
-        Ziya Gökalp Anadolu Lisesi
-    </p>
+<h1>Mobil Kardiyo-Nöro Risk Analizi</h1>
+<p>TÜBİTAK Projesi • Ziya Gökalp Anadolu Lisesi</p>
 </header>
 
 <div class="container">
 
-    <div class="card">
-        <h2>🎯 Projenin Amacı</h2>
-        <p>
-            Bu proje, giyilebilir cihazlardan elde edilen EKG verilerini kullanarak
-            erken kardiyovasküler ve nörolojik risk göstergelerini analiz etmeyi amaçlamaktadır.
-            Sistem tıbbi teşhis koymaz; erken farkındalık sağlamaya yöneliktir.
-        </p>
-    </div>
+<div class="card">
+<h2>EKG Görseli Yükle</h2>
 
-    <div class="card">
-        <h2>🧠 Sistem Mimarisi</h2>
-        <div class="flow">
-            Kullanıcı → EKG Verisi → Görüntü & Sinyal İşleme → Risk Analizi → Sonuç
-        </div>
-    </div>
+<input type="file" id="imageUpload" accept="image/*">
+<br><br>
+<button onclick="analyzeImage()">Analiz Et</button>
 
-    <div class="card">
-        <h2>📷 Örnek EKG Görseli</h2>
-        <p>Akıllı saatten alınan örnek EKG çıktısı:</p>
-
-        <!-- BURAYA KENDİ EKG GÖRSELİNİ KOYACAKSIN -->
-        <img src="ekg.jpg" alt="EKG Görseli">
-
-        <p style="font-size:14px; opacity:0.8;">
-            Görsel OpenCV tabanlı algoritma ile analiz edilmektedir.
-        </p>
-    </div>
-
-    <div class="card demo">
-        <h2>📊 Risk Analizi Simülasyonu</h2>
-        <p>EKG ritim değerlendirmesi:</p>
-        <button onclick="runDemo()">Analizi Başlat</button>
-        <div id="result"></div>
-    </div>
-
-    <div class="card">
-        <h2>⚙️ Kullanılan Teknolojiler</h2>
-        <ul>
-            <li>Python (OpenCV, NumPy)</li>
-            <li>Görüntü İşleme</li>
-            <li>Sinyal Analizi Mantığı</li>
-            <li>GitHub Versiyon Kontrol Sistemi</li>
-        </ul>
-    </div>
-
-    <div class="card">
-        <h2>⚠️ Etik Uyarı</h2>
-        <p style="color:#dc2626;font-weight:600;">
-            Bu sistem tıbbi tanı koymaz. 
-            Sadece erken risk göstergesi sunar ve eğitim amaçlıdır.
-        </p>
-    </div>
+<canvas id="canvas" style="display:none;"></canvas>
+<img id="preview">
+<div id="result"></div>
 
 </div>
 
-<footer>
-    TÜBİTAK 2204 Proje Taslağı • Ziya Gökalp Anadolu Lisesi • 2026
-</footer>
+<div class="card">
+<h3>Etik Uyarı</h3>
+<p style="color:red;">
+Bu sistem tıbbi tanı koymaz. Eğitim amaçlı erken risk göstergesi sunar.
+</p>
+</div>
+
+</div>
 
 <script>
-function runDemo(){
-    const r = Math.random();
-    const result = document.getElementById("result");
 
-    if(r < 0.45){
-        result.innerHTML = "Düşük Risk – Düzenli Ritim Tespit Edildi";
-        result.className = "low";
-    } else if(r < 0.75){
-        result.innerHTML = "Orta Risk – Küçük Ritim Düzensizliği";
-        result.className = "mid";
-    } else {
-        result.innerHTML = "Yüksek Risk – Belirgin Ritim Düzensizliği";
-        result.className = "high";
+let uploadedImage = new Image();
+
+document.getElementById("imageUpload").addEventListener("change", function(event){
+    const reader = new FileReader();
+    reader.onload = function(){
+        uploadedImage.src = reader.result;
+        document.getElementById("preview").src = reader.result;
     }
+    reader.readAsDataURL(event.target.files[0]);
+});
+
+function analyzeImage(){
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = uploadedImage.width;
+    canvas.height = uploadedImage.height;
+
+    ctx.drawImage(uploadedImage,0,0);
+
+    const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+    const data = imageData.data;
+
+    let brightnessSum = 0;
+    let edgeScore = 0;
+
+    for(let i=0; i<data.length; i+=4){
+        let gray = (data[i] + data[i+1] + data[i+2]) / 3;
+        brightnessSum += gray;
+
+        if(i > 4){
+            let prevGray = (data[i-4] + data[i-3] + data[i-2]) / 3;
+            edgeScore += Math.abs(gray - prevGray);
+        }
+    }
+
+    let avgBrightness = brightnessSum / (data.length/4);
+    let normalizedEdge = edgeScore / (data.length/4);
+
+    let resultText = "";
+    let resultClass = "";
+
+    if(normalizedEdge < 15){
+        resultText = "Düşük Risk – Düzenli Sinyal Yapısı";
+        resultClass = "low";
+    } 
+    else if(normalizedEdge < 30){
+        resultText = "Orta Risk – Olası Ritim Düzensizliği";
+        resultClass = "mid";
+    } 
+    else{
+        resultText = "Yüksek Risk – Belirgin Sinyal Dalgalanması";
+        resultClass = "high";
+    }
+
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = resultText +
+        "<br><small>Analiz Skoru: " + normalizedEdge.toFixed(2) + "</small>";
+    resultDiv.className = resultClass;
 }
+
 </script>
 
 </body>
