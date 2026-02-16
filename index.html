@@ -1,152 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Mobile Cardio-Neuro Risk Analysis</title>
+<title>Mobil Kardiyo-Nöro Risk Analiz Sistemi</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
+:root{
+    --primary:#1e3a8a;
+    --secondary:#2563eb;
+    --bg:#f1f5f9;
+    --card:#ffffff;
+    --text:#0f172a;
+}
+
 body{
     margin:0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-    color:#fff;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
 }
+
+header{
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    padding:50px 20px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    font-size:2.2em;
+}
+
+header p{
+    margin-top:10px;
+    opacity:0.95;
+}
+
 .container{
     max-width:1000px;
-    margin:auto;
-    padding:40px 20px;
+    margin:40px auto;
+    padding:0 20px;
 }
-h1{
-    text-align:center;
-    font-size:38px;
-    margin-bottom:10px;
-}
-.subtitle{
-    text-align:center;
-    opacity:.85;
-    margin-bottom:40px;
-}
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:25px;
-}
+
 .card{
-    background:rgba(255,255,255,.1);
+    background:var(--card);
+    border-radius:12px;
     padding:25px;
-    border-radius:16px;
-    backdrop-filter: blur(10px);
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
+    margin-bottom:25px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
 }
+
 .card h2{
     margin-top:0;
-    color:#4fd1ff;
+    color:var(--primary);
 }
-.card p, li{
-    line-height:1.6;
-    color:#e6f4ff;
-}
-button{
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:10px;
-    font-size:16px;
-    background:#4fd1ff;
-    color:#0f2027;
-    cursor:pointer;
-    font-weight:bold;
-}
-button:hover{
-    background:#38bdf8;
-}
-.result{
-    margin-top:15px;
-    font-weight:bold;
-    font-size:18px;
-}
-.footer{
-    margin-top:40px;
+
+.flow{
+    font-weight:600;
     text-align:center;
-    font-size:14px;
-    opacity:.7;
+    background:#e0e7ff;
+    padding:15px;
+    border-radius:8px;
 }
-.warning{
-    color:#ffb703;
-    font-weight:bold;
+
+.demo{
+    text-align:center;
+}
+
+button{
+    background:var(--secondary);
+    color:white;
+    border:none;
+    padding:12px 30px;
+    font-size:16px;
+    border-radius:30px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    background:var(--primary);
+}
+
+#result{
+    margin-top:20px;
+    font-size:18px;
+    font-weight:600;
+}
+
+.low{ color:green; }
+.mid{ color:#d97706; }
+.high{ color:#dc2626; }
+
+img{
+    max-width:100%;
+    border-radius:10px;
+    margin-top:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    font-size:14px;
+    opacity:0.7;
 }
 </style>
 </head>
 
 <body>
+
+<header>
+    <h1>Mobil Kardiyo-Nöro Erken Risk Analiz Sistemi</h1>
+    <p>
+        TÜBİTAK Proje Çalışması<br>
+        Ziya Gökalp Anadolu Lisesi
+    </p>
+</header>
+
 <div class="container">
 
-<h1>Mobile Cardio-Neuro<br>Early Risk Analysis</h1>
-<p class="subtitle">
-Wearable ECG & signal-based preliminary health risk assessment
-</p>
+    <div class="card">
+        <h2>🎯 Projenin Amacı</h2>
+        <p>
+            Bu proje, giyilebilir cihazlardan elde edilen EKG verilerini kullanarak
+            erken kardiyovasküler ve nörolojik risk göstergelerini analiz etmeyi amaçlamaktadır.
+            Sistem tıbbi teşhis koymaz; erken farkındalık sağlamaya yöneliktir.
+        </p>
+    </div>
 
-<div class="grid">
+    <div class="card">
+        <h2>🧠 Sistem Mimarisi</h2>
+        <div class="flow">
+            Kullanıcı → EKG Verisi → Görüntü & Sinyal İşleme → Risk Analizi → Sonuç
+        </div>
+    </div>
 
-<div class="card">
-<h2>🎯 Project Aim</h2>
-<p>
-To analyze early cardiovascular and neurological risk indicators 
-using ECG data obtained from wearable devices and signal processing algorithms.
-</p>
+    <div class="card">
+        <h2>📷 Örnek EKG Görseli</h2>
+        <p>Akıllı saatten alınan örnek EKG çıktısı:</p>
+
+        <!-- BURAYA KENDİ EKG GÖRSELİNİ KOYACAKSIN -->
+        <img src="ekg.jpg" alt="EKG Görseli">
+
+        <p style="font-size:14px; opacity:0.8;">
+            Görsel OpenCV tabanlı algoritma ile analiz edilmektedir.
+        </p>
+    </div>
+
+    <div class="card demo">
+        <h2>📊 Risk Analizi Simülasyonu</h2>
+        <p>EKG ritim değerlendirmesi:</p>
+        <button onclick="runDemo()">Analizi Başlat</button>
+        <div id="result"></div>
+    </div>
+
+    <div class="card">
+        <h2>⚙️ Kullanılan Teknolojiler</h2>
+        <ul>
+            <li>Python (OpenCV, NumPy)</li>
+            <li>Görüntü İşleme</li>
+            <li>Sinyal Analizi Mantığı</li>
+            <li>GitHub Versiyon Kontrol Sistemi</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>⚠️ Etik Uyarı</h2>
+        <p style="color:#dc2626;font-weight:600;">
+            Bu sistem tıbbi tanı koymaz. 
+            Sadece erken risk göstergesi sunar ve eğitim amaçlıdır.
+        </p>
+    </div>
+
 </div>
 
-<div class="card">
-<h2>🧠 System Workflow</h2>
-<p>
-User → Wearable ECG → Image Processing → Signal Analysis → Risk Scoring → Result
-</p>
-</div>
-
-<div class="card">
-<h2>⚙️ Technologies</h2>
-<ul>
-<li>Python & OpenCV</li>
-<li>Signal Processing Logic</li>
-<li>Wearable ECG Data</li>
-<li>GitHub Version Control</li>
-</ul>
-</div>
-
-<div class="card">
-<h2>📊 ECG Analysis Demo</h2>
-<p>Simulated rhythm regularity analysis</p>
-<button onclick="analyze()">Run Demo Analysis</button>
-<div id="demoResult" class="result"></div>
-</div>
-
-</div>
-
-<div class="card" style="margin-top:30px">
-<p class="warning">
-⚠️ This system does NOT provide medical diagnosis.<br>
-It is designed for early risk indication and academic research purposes.
-</p>
-</div>
-
-<div class="footer">
-Developed as a TÜBİTAK Project Proposal · GitHub Pages Demo
-</div>
-
-</div>
+<footer>
+    TÜBİTAK 2204 Proje Taslağı • Ziya Gökalp Anadolu Lisesi • 2026
+</footer>
 
 <script>
-function analyze(){
-    let r=Math.random();
-    let txt="";
-    if(r<0.4){
-        txt="Low Risk — Regular ECG rhythm detected";
-    }else if(r<0.7){
-        txt="Moderate Risk — Slight rhythm irregularity";
-    }else{
-        txt="High Risk — Irregular rhythm indicator";
+function runDemo(){
+    const r = Math.random();
+    const result = document.getElementById("result");
+
+    if(r < 0.45){
+        result.innerHTML = "Düşük Risk – Düzenli Ritim Tespit Edildi";
+        result.className = "low";
+    } else if(r < 0.75){
+        result.innerHTML = "Orta Risk – Küçük Ritim Düzensizliği";
+        result.className = "mid";
+    } else {
+        result.innerHTML = "Yüksek Risk – Belirgin Ritim Düzensizliği";
+        result.className = "high";
     }
-    document.getElementById("demoResult").innerHTML=txt;
 }
 </script>
 
