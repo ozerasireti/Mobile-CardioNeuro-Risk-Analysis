@@ -214,7 +214,103 @@ function analyzeImage(){
     document.getElementById("result").className = resultClass;
 }
 
+</script><script>
+
+let uploadedImage = new Image();
+
+document.getElementById("imageUpload").addEventListener("change", function(event){
+    const reader = new FileReader();
+    reader.onload = function(){
+        uploadedImage.src = reader.result;
+        document.getElementById("preview").src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+});
+
+function analyzeImage(){
+
+    if(!uploadedImage.src){
+        alert("Lütfen önce bir EKG görseli yükleyiniz.");
+        return;
+    }
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = uploadedImage.width;
+    canvas.height = uploadedImage.height;
+
+    ctx.drawImage(uploadedImage,0,0);
+
+    const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+    const data = imageData.data;
+
+    let waveform = [];
+
+    // Her sütundaki ortalama koyuluk
+    for(let x=0; x<canvas.width; x++){
+        let columnSum = 0;
+        for(let y=0; y<canvas.height; y++){
+            let index = (y*canvas.width + x) * 4;
+            let gray = (data[index] + data[index+1] + data[index+2]) / 3;
+            columnSum += gray;
+        }
+        waveform.push(255 - (columnSum / canvas.height));
+    }
+
+    // Tepe noktası tespiti
+    let peaks = [];
+    for(let i=2; i<waveform.length-2; i++){
+        if(waveform[i] > waveform[i-1] &&
+           waveform[i] > waveform[i+1] &&
+           waveform[i] > 30){   // eşik
+            peaks.push(i);
+        }
+    }
+
+    if(peaks.length < 2){
+        document.getElementById("result").innerHTML =
+        "Yeterli R tepesi tespit edilemedi.";
+        return;
+    }
+
+    // R-R interval hesaplama
+    let intervals = [];
+    for(let i=1; i<peaks.length; i++){
+        intervals.push(peaks[i] - peaks[i-1]);
+    }
+
+    let avgInterval = intervals.reduce((a,b)=>a+b,0) / intervals.length;
+
+    // BPM tahmini (görsel genişliğine göre normalize)
+    let bpm = 60000 / avgInterval;
+
+    // HRV (standart sapma)
+    let mean = avgInterval;
+    let variance = intervals.reduce((sum,val)=>sum + Math.pow(val-mean,2),0)/intervals.length;
+    let hrv = Math.sqrt(variance);
+
+    let riskText="";
+    if(hrv < 5){
+        riskText="Düşük HRV – Olası ritim baskılanması";
+    }
+    else if(hrv < 15){
+        riskText="Orta HRV – Normal varyasyon";
+    }
+    else{
+        riskText="Yüksek HRV – Düzensiz ritim ihtimali";
+    }
+
+    document.getElementById("result").innerHTML = `
+        BPM Tahmini: ${bpm.toFixed(1)}<br>
+        HRV: ${hrv.toFixed(2)}<br>
+        R Peak Sayısı: ${peaks.length}<br>
+        Değerlendirme: ${riskText}
+    `;
+}
+
 </script>
+
 
 </body>
 </html>
