@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZGL BioSignal Analyzer v4.0</title>
+<title>ZGL BioSignal Analyzer v5.0</title>
 
 <style>
 body{
@@ -26,6 +26,7 @@ header{
     background:#1e293b;
     padding:25px;
     border-radius:12px;
+    margin-bottom:20px;
 }
 button{
     padding:12px 25px;
@@ -35,6 +36,10 @@ button{
     color:white;
     cursor:pointer;
     margin-top:10px;
+}
+input{
+    margin-top:10px;
+    padding:8px;
 }
 #report{
     margin-top:20px;
@@ -49,19 +54,29 @@ button{
 <body>
 
 <header>
-<h1>ZGL BioSignal Analyzer v4.0</h1>
-<p>Ziya Gökalp Anadolu Lisesi • TÜBİTAK Proje Taslağı</p>
+<h1>ZGL BioSignal Analyzer v5.0</h1>
+<p>Kalibrasyonlu EKG Analiz Sistemi</p>
 </header>
 
 <div class="container">
+
 <div class="card">
-<h2>EKG Görseli Yükle ve Analiz Et</h2>
+<h2>1️⃣ EKG Görseli Yükle</h2>
 <input type="file" id="imageUpload" accept="image/*">
-<br>
-<button onclick="analyzeImage()">Analiz Başlat</button>
+</div>
+
+<div class="card">
+<h2>2️⃣ Kalibrasyon</h2>
+<label>1 Büyük Kare Kaç Piksel?</label><br>
+<input type="number" id="calibration" placeholder="Örn: 20">
+</div>
+
+<div class="card">
+<button onclick="analyzeImage()">Analizi Başlat</button>
 <canvas id="canvas" style="display:none;"></canvas>
 <div id="report"></div>
 </div>
+
 </div>
 
 <footer style="text-align:center;padding:20px;">
@@ -81,6 +96,13 @@ document.getElementById("imageUpload").addEventListener("change", function(event
 });
 
 function analyzeImage(){
+
+    const bigSquarePx = parseFloat(document.getElementById("calibration").value);
+
+    if(!bigSquarePx || bigSquarePx <= 0){
+        alert("Kalibrasyon değeri giriniz.");
+        return;
+    }
 
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
@@ -105,17 +127,22 @@ function analyzeImage(){
     }
 
     let peaks=[];
+    let minDistance = bigSquarePx * 2; // minimum 2 büyük kare arası
+
     for(let i=2;i<waveform.length-2;i++){
         if(waveform[i]>waveform[i-1] &&
            waveform[i]>waveform[i+1] &&
            waveform[i]>40){
-           peaks.push(i);
+
+           if(peaks.length===0 || i - peaks[peaks.length-1] > minDistance){
+               peaks.push(i);
+           }
         }
     }
 
     if(peaks.length<2){
         document.getElementById("report").innerText=
-        "Yeterli R tepesi tespit edilemedi.\nLütfen daha net bir EKG yükleyin.";
+        "Yeterli R tepesi bulunamadı.";
         return;
     }
 
@@ -124,36 +151,37 @@ function analyzeImage(){
         intervals.push(peaks[i]-peaks[i-1]);
     }
 
-    let avg = intervals.reduce((a,b)=>a+b)/intervals.length;
-    let bpm = 60000/avg;
+    let avgPx = intervals.reduce((a,b)=>a+b)/intervals.length;
 
-    let variance = intervals.reduce((s,v)=>s+Math.pow(v-avg,2),0)/intervals.length;
-    let hrv = Math.sqrt(variance);
+    // 1 büyük kare = 0.20 saniye
+    let secondsPerPixel = 0.20 / bigSquarePx;
 
-    let düzenlilik = hrv < 8 ? "Ritim düzenli görünmektedir."
-                     : hrv < 20 ? "Hafif varyasyon gözlemlendi."
-                     : "Belirgin ritim düzensizliği ihtimali.";
+    let rrSeconds = avgPx * secondsPerPixel;
+    let bpm = 60 / rrSeconds;
 
-    let bpmYorum = bpm < 60 ? "Bradikardi eğilimi."
-                  : bpm > 100 ? "Taşikardi eğilimi."
-                  : "Normal kalp hızı aralığı.";
+    if(bpm > 220 || bpm < 30){
+        document.getElementById("report").innerText=
+        "Hesaplama hatası: Kalibrasyon veya görüntü uygun değil.";
+        return;
+    }
+
+    let variance = intervals.reduce((s,v)=>s+Math.pow(v-avgPx,2),0)/intervals.length;
+    let hrv = Math.sqrt(variance) * secondsPerPixel * 1000; // ms
 
     let rapor =
 `---- ANALİZ RAPORU ----
 
 Toplam R-Peak: ${peaks.length}
-Ortalama R-R Interval: ${avg.toFixed(2)}
-BPM Tahmini: ${bpm.toFixed(1)}
-HRV (Standart Sapma): ${hrv.toFixed(2)}
+Ortalama R-R Süresi: ${rrSeconds.toFixed(3)} saniye
+BPM: ${bpm.toFixed(1)}
+HRV: ${hrv.toFixed(2)} ms
 
-Ritim Analizi:
-${düzenlilik}
-
-Kalp Hızı Yorumu:
-${bpmYorum}
+Yorum:
+BPM 60-100 aralığında ise normal kabul edilir.
+HRV değeri otonom sinir sistemi varyasyonunu gösterir.
 
 Not:
-Bu analiz görsel tabanlıdır ve klinik teşhis yerine geçmez.`;
+Bu sistem görsel kalibrasyon temellidir ve klinik teşhis yerine geçmez.`;
 
     document.getElementById("report").innerText = rapor;
 }
