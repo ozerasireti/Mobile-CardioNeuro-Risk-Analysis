@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZGL BioSignal Analyzer v3.0</title>
+<title>ZGL BioSignal Analyzer v4.0</title>
 
 <style>
 body{
@@ -12,26 +12,21 @@ body{
     background:#0f172a;
     color:white;
 }
-
 header{
     text-align:center;
     padding:40px;
     background:linear-gradient(135deg,#1e3a8a,#2563eb);
 }
-
 .container{
     max-width:1000px;
     margin:30px auto;
     padding:20px;
 }
-
 .card{
     background:#1e293b;
     padding:25px;
-    margin-bottom:25px;
     border-radius:12px;
 }
-
 button{
     padding:12px 25px;
     border:none;
@@ -41,18 +36,12 @@ button{
     cursor:pointer;
     margin-top:10px;
 }
-
-button:hover{
-    background:#1e40af;
-}
-
-input{
-    margin-top:10px;
-}
-
-#result, #neuroResult{
+#report{
     margin-top:20px;
-    font-size:17px;
+    background:#0f172a;
+    padding:20px;
+    border-radius:10px;
+    white-space:pre-line;
 }
 </style>
 </head>
@@ -60,32 +49,22 @@ input{
 <body>
 
 <header>
-<h1>ZGL BioSignal Analyzer v3.0</h1>
+<h1>ZGL BioSignal Analyzer v4.0</h1>
 <p>Ziya Gökalp Anadolu Lisesi • TÜBİTAK Proje Taslağı</p>
 </header>
 
 <div class="container">
-
 <div class="card">
-<h2>📈 EKG Analizi</h2>
+<h2>EKG Görseli Yükle ve Analiz Et</h2>
 <input type="file" id="imageUpload" accept="image/*">
 <br>
-<button onclick="analyzeImage()">EKG Analiz Et</button>
+<button onclick="analyzeImage()">Analiz Başlat</button>
 <canvas id="canvas" style="display:none;"></canvas>
-<div id="result"></div>
+<div id="report"></div>
+</div>
 </div>
 
-<div class="card">
-<h2>⚡ Nöro-Motor Reaksiyon Testi</h2>
-<p>Hazır ol butona bas. Ekran yeşile döndüğünde dokun.</p>
-<button onclick="startTest()">Testi Başlat</button>
-<div id="reactionBox" style="width:100%;height:120px;background:#334155;margin-top:20px;border-radius:10px;"></div>
-<div id="neuroResult"></div>
-</div>
-
-</div>
-
-<footer style="text-align:center;padding:20px;background:#0f172a;">
+<footer style="text-align:center;padding:20px;">
 Hazırlayan: Muhammed Ekrem Özer • 9-C
 </footer>
 
@@ -135,7 +114,8 @@ function analyzeImage(){
     }
 
     if(peaks.length<2){
-        document.getElementById("result").innerHTML="Yeterli R tepesi bulunamadı.";
+        document.getElementById("report").innerText=
+        "Yeterli R tepesi tespit edilemedi.\nLütfen daha net bir EKG yükleyin.";
         return;
     }
 
@@ -150,34 +130,32 @@ function analyzeImage(){
     let variance = intervals.reduce((s,v)=>s+Math.pow(v-avg,2),0)/intervals.length;
     let hrv = Math.sqrt(variance);
 
-    document.getElementById("result").innerHTML=
-    "BPM: "+bpm.toFixed(1)+"<br>"+
-    "HRV: "+hrv.toFixed(2)+"<br>"+
-    "R-Peak Sayısı: "+peaks.length;
-}
+    let düzenlilik = hrv < 8 ? "Ritim düzenli görünmektedir."
+                     : hrv < 20 ? "Hafif varyasyon gözlemlendi."
+                     : "Belirgin ritim düzensizliği ihtimali.";
 
-// NEURO TEST
-let startTime;
-let timeout;
+    let bpmYorum = bpm < 60 ? "Bradikardi eğilimi."
+                  : bpm > 100 ? "Taşikardi eğilimi."
+                  : "Normal kalp hızı aralığı.";
 
-function startTest(){
-    const box=document.getElementById("reactionBox");
-    box.style.background="#334155";
-    document.getElementById("neuroResult").innerHTML="Bekleyin...";
-    
-    timeout=setTimeout(()=>{
-        box.style.background="green";
-        startTime=Date.now();
-    }, Math.random()*3000+2000);
+    let rapor =
+`---- ANALİZ RAPORU ----
 
-    box.onclick=function(){
-        if(box.style.background==="green"){
-            let reaction=Date.now()-startTime;
-            document.getElementById("neuroResult").innerHTML=
-            "Reaksiyon Süresi: "+reaction+" ms";
-            box.style.background="#334155";
-        }
-    }
+Toplam R-Peak: ${peaks.length}
+Ortalama R-R Interval: ${avg.toFixed(2)}
+BPM Tahmini: ${bpm.toFixed(1)}
+HRV (Standart Sapma): ${hrv.toFixed(2)}
+
+Ritim Analizi:
+${düzenlilik}
+
+Kalp Hızı Yorumu:
+${bpmYorum}
+
+Not:
+Bu analiz görsel tabanlıdır ve klinik teşhis yerine geçmez.`;
+
+    document.getElementById("report").innerText = rapor;
 }
 
 </script>
