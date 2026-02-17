@@ -6,36 +6,29 @@
 
 <style>
 body{
-    background: linear-gradient(135deg, #000000, #1a1a1a);
+    margin:0;
+    background:black;
+    font-family:Segoe UI;
     color:white;
-    font-family: 'Segoe UI', sans-serif;
     text-align:center;
 }
 
-.container{
-    margin-top:40px;
+header{
+    padding:30px;
+    border-bottom:2px solid gold;
 }
 
-.logo{
-    font-size:40px;
-    font-weight:bold;
+h1{
     color:gold;
     letter-spacing:3px;
 }
 
-.subtitle{
-    color:#ff2e2e;
-    font-size:18px;
-    margin-bottom:20px;
-}
-
 button{
-    background:#ff2e2e;
+    background:#c40000;
     color:white;
     padding:12px 25px;
     border:none;
     border-radius:8px;
-    font-size:16px;
     cursor:pointer;
     margin-top:15px;
 }
@@ -46,72 +39,131 @@ button:hover{
 }
 
 .result{
-    margin-top:30px;
+    margin:30px auto;
+    width:70%;
     background:#111;
     padding:20px;
     border-radius:10px;
-    width:60%;
-    margin-left:auto;
-    margin-right:auto;
     border:1px solid gold;
+    text-align:left;
 }
 
 .footer{
-    margin-top:50px;
+    margin-top:40px;
+    padding:15px;
     color:gold;
-    font-size:14px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<header>
+<h1>ZGL CARDIO NEURO</h1>
+<p>Akıllı Kardiyo-Nöro Klinik Destek Sistemi</p>
+</header>
 
-<div class="logo">ZGL CARDIO NEURO</div>
-<div class="subtitle">Kalibrasyonlu EKG Analiz Sistemi</div>
+<br>
 
-<input type="file" id="upload" accept="image/*"><br>
-<button onclick="analyze()">Analizi Başlat</button>
+<input type="file"><br>
+<button onclick="generateReport()">Analizi Başlat</button>
 
 <div class="result" id="output">
-Analiz sonucu burada görünecek.
+Analiz raporu burada görüntülenecek.
 </div>
 
 <div class="footer">
-Hazırlayan: Muhammed Ekrem Özer – 9/C
-</div>
-
+Hazırlayan: Muhammed Ekrem Özer – 9/C <br>
+Ziya Gökalp Anadolu Lisesi
 </div>
 
 <script>
 
-function analyze(){
+function generateReport(){
 
-let bpm = Math.floor(Math.random()*20)+70;
-let hrv = (Math.random()*0.05).toFixed(3);
+// ÖRNEK ANALİZ DEĞERLERİ
+// Gerçek projede buraya Python analiz sonucu gelecek
+let bpm = Math.floor(Math.random()*50)+60;
+let hrv = (Math.random()*0.12).toFixed(3);
 
-let yorum = "";
+let kategori = "";
+let detay = "";
+let oneriler = "";
+let doktor = "";
 
-if(bpm < 60){
-    yorum="Bradikardi Eğilimi";
+if(bpm >= 60 && bpm <= 100 && hrv < 0.08){
+
+    kategori = "NORMAL SİNÜS RİTMİ";
+    detay = "Kalp ritmi düzenli ve fizyolojik sınırlar içerisindedir.";
+    oneriler = `
+    • Haftada en az 3 gün orta tempolu yürüyüş<br>
+    • Dengeli beslenme ve tuz kısıtlaması<br>
+    • Yıllık kardiyoloji kontrolü<br>
+    `;
+    doktor = "Rutin aile hekimi kontrolü yeterlidir.";
+
 }
 else if(bpm > 100){
-    yorum="Taşikardi Eğilimi";
+
+    kategori = "TAŞİKARDİ EĞİLİMİ";
+    detay = "Kalp atım hızı normal sınırın üzerindedir.";
+    oneriler = `
+    • Kafein tüketimi azaltılmalı<br>
+    • Günlük su tüketimi artırılmalı<br>
+    • Nefes egzersizleri uygulanmalı<br>
+    • Stres yönetimi yapılmalı<br>
+    `;
+    doktor = "1 hafta içinde Kardiyoloji uzmanına başvurulması önerilir.";
+
 }
-else{
-    yorum="Normal Sinüs Ritmi";
+else if(hrv >= 0.08){
+
+    kategori = "RİTİM DÜZENSİZLİĞİ ŞÜPHESİ";
+    detay = "RR interval değişkenliği artmış görünüyor.";
+    oneriler = `
+    • 24 saat Holter EKG önerilir<br>
+    • Çarpıntı varsa gecikmeden değerlendirme yapılmalı<br>
+    • Elektrolit dengesi kontrol edilmeli<br>
+    `;
+    doktor = "Kardiyoloji uzmanına başvurulmalıdır.";
+
+}
+else if(bpm < 60){
+
+    kategori = "BRADİKARDİ EĞİLİMİ";
+    detay = "Kalp atım hızı düşük tespit edildi.";
+    oneriler = `
+    • Bayılma veya halsizlik varsa acil değerlendirme<br>
+    • Tiroit fonksiyon testleri önerilir<br>
+    • Sporcu kalbi ihtimali göz önünde bulundurulmalı<br>
+    `;
+    doktor = "Kardiyoloji uzmanına danışılmalıdır.";
+
 }
 
-document.getElementById("output").innerHTML=
-`
-<h2 style="color:gold;">--- ANALİZ RAPORU ---</h2>
-<p>Toplam R-Peak: 12</p>
-<p>Ortalama BPM: <span style="color:#ff2e2e;">${bpm}</span></p>
-<p>HRV (SDNN): ${hrv}</p>
-<p><b>Ritim Yorumu:</b> ${yorum}</p>
+document.getElementById("output").innerHTML = `
+<h2 style="color:gold;">--- KLİNİK DESTEK RAPORU ---</h2>
+
+<p><b>Ortalama BPM:</b> <span style="color:#c40000;">${bpm}</span></p>
+<p><b>HRV:</b> ${hrv}</p>
+
+<hr>
+
+<h3 style="color:#c40000;">Risk Kategorisi: ${kategori}</h3>
+
+<p>${detay}</p>
+
+<h3 style="color:gold;">Öneriler:</h3>
+<p>${oneriler}</p>
+
+<h3 style="color:#c40000;">Uzman Yönlendirme:</h3>
+<p>${doktor}</p>
+
 <br>
-<small>Not: Bu analiz görsel tabanlıdır, klinik teşhis yerine geçmez.</small>
+<small>
+⚠️ Bu sistem klinik karar destek amacıyla geliştirilmiştir. 
+Kesin teşhis için sağlık kuruluşuna başvurulmalıdır.
+</small>
 `;
 
 }
