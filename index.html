@@ -2,203 +2,181 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>ZGL CARDIO NEURO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZGL NeuroVision | ASELSAN Proje Sunumu</title>
 
 <style>
-body{
+body {
     margin:0;
-    background:black;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color:#0b0b0b;
     color:white;
-    font-family:Segoe UI;
+    line-height:1.6;
+}
+
+header {
+    background: linear-gradient(90deg, #000000, #8B0000);
+    padding:40px;
     text-align:center;
+    border-bottom:3px solid gold;
 }
 
-header{
-    padding:30px;
-    border-bottom:2px solid gold;
-}
-
-h1{
+header h1 {
+    font-size:38px;
     color:gold;
-    letter-spacing:3px;
+    letter-spacing:2px;
 }
 
-button{
-    background:#c40000;
+header h2 {
+    font-size:18px;
     color:white;
-    padding:12px 25px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    margin-top:15px;
+    font-weight:normal;
 }
 
-button:hover{
+section {
+    padding:40px 10%;
+    border-bottom:1px solid #222;
+}
+
+h3 {
+    color:gold;
+    border-left:5px solid #8B0000;
+    padding-left:10px;
+}
+
+.highlight {
+    color:#ff4d4d;
+    font-weight:bold;
+}
+
+.box {
+    background:#111;
+    padding:20px;
+    border:1px solid #8B0000;
+    margin-top:20px;
+    border-radius:8px;
+}
+
+footer {
+    background:#000;
+    padding:30px;
+    text-align:center;
+    border-top:3px solid gold;
+    font-size:14px;
+    color:#aaa;
+}
+
+.button {
+    display:inline-block;
+    padding:12px 25px;
     background:gold;
     color:black;
+    text-decoration:none;
+    font-weight:bold;
+    border-radius:5px;
+    margin-top:20px;
 }
 
-.result{
-    width:70%;
-    margin:30px auto;
-    background:#111;
-    padding:25px;
-    border-radius:10px;
-    border:1px solid gold;
-    text-align:left;
+.button:hover {
+    background:#ffcc00;
 }
 
-.project-info{
-    width:70%;
-    margin:30px auto;
-    padding:20px;
-    border-top:2px solid gold;
-    color:#ddd;
-    text-align:left;
+ul {
+    margin-left:20px;
 }
 
-.footer{
-    margin-top:40px;
-    padding:15px;
-    color:gold;
-}
 </style>
 </head>
 
 <body>
 
 <header>
-<h1>ZGL CARDIO NEURO</h1>
-<p>Erken Kardiyovasküler Risk Analiz Sistemi</p>
+    <h1>ZGL NEUROVISION</h1>
+    <h2>Akıllı Gözlük Tabanlı Nöro-Kardiyovasküler Erken Uyarı Sistemi</h2>
+    <p>Hazırlayan: Muhammed Ekrem Özer | 9-C</p>
 </header>
 
-<br>
-
-<input type="file" id="imageInput" accept="image/*"><br>
-<button onclick="analyze()">Analizi Başlat</button>
-
-<div class="result" id="output">
-Analiz raporu burada görüntülenecek.
+<section>
+<h3>1. Projenin Amacı</h3>
+<p>
+ZGL NeuroVision sistemi; askeri personel, pilotlar ve kritik görevde bulunan bireylerin 
+<span class="highlight">nabız, kalp ritmi, beyin aktivitesi ve göz tansiyonunu</span> 
+gerçek zamanlı olarak analiz ederek erken risk tespiti yapmayı amaçlamaktadır.
+</p>
+<div class="box">
+Bu sistem klasik medikal cihazlardan farklı olarak tüm verileri tek platformda birleştirir ve yapay zekâ ile analiz eder.
 </div>
+</section>
 
-<div class="project-info">
-<h3 style="color:gold;">Proje Amacı</h3>
-Bu proje, EKG görselleri üzerinden piksel tabanlı analiz yaparak
-erken kardiyovasküler risk belirtilerini tespit etmeyi amaçlamaktadır.
-Amaç, taşınabilir ve hızlı bir ön değerlendirme sistemi geliştirmektir.
-Sistem klinik teşhis koymaz, karar destek mekanizması olarak çalışır.
+<section>
+<h3>2. Teknik Bileşenler</h3>
+<ul>
+<li>PPG Sensörü ile Nabız Ölçümü</li>
+<li>Mikro EEG Elektrotları ile Beyin Aktivitesi</li>
+<li>Non-invaziv Göz Basınç Sensörü</li>
+<li>Gerçek Zamanlı Yapay Zekâ Analiz Motoru</li>
+<li>AES-256 Veri Güvenliği</li>
+</ul>
+</section>
+
+<section>
+<h3>3. Yapay Zekâ Analiz Sistemi</h3>
+<p>
+Sistem aşağıdaki adımlarla çalışır:
+</p>
+<ul>
+<li>Gürültü Filtreleme</li>
+<li>R-Peak Tespiti</li>
+<li>HRV Hesaplama</li>
+<li>EEG Dalga Analizi</li>
+<li>Risk Skorlama</li>
+</ul>
+
+<div class="box">
+Uyarı Seviyeleri:<br>
+Seviye 1 – Önlem<br>
+Seviye 2 – Risk<br>
+Seviye 3 – Kritik Müdahale
 </div>
+</section>
 
-<div class="footer">
-Hazırlayan: Muhammed Ekrem Özer – 9/C <br>
-Ziya Gökalp Anadolu Lisesi
-</div>
+<section>
+<h3>4. Askeri Kullanım Senaryosu</h3>
+<p>
+Bir pilot yüksek irtifada görev yaparken sistem;
+</p>
+<ul>
+<li>Ani nabız artışı</li>
+<li>Bilinç bulanıklığı</li>
+<li>Stres pikleri</li>
+</ul>
+tespit ederse otomatik erken uyarı üretir ve komuta merkezine veri gönderir.
+</section>
 
-<script>
+<section>
+<h3>5. Yenilikçi Özellikler</h3>
+<ul>
+<li>Gözlük formunda entegre sistem</li>
+<li>Çoklu biyometrik veri analizi</li>
+<li>Gerçek zamanlı risk tahmini</li>
+<li>Yerli yazılım ve özgün algoritma</li>
+</ul>
+</section>
 
-function analyze(){
+<section>
+<h3>6. Savunma Sanayi Katkısı</h3>
+<p>
+ZGL NeuroVision sistemi ASELSAN Ar-Ge altyapısı ile geliştirildiğinde,
+Türkiye’nin savunma teknolojileri alanındaki yerli üretim kapasitesini artıracaktır.
+</p>
+<a href="#" class="button">Proje Değerlendirmeye Sunuldu</a>
+</section>
 
-let file = document.getElementById("imageInput").files[0];
-
-if(!file){
-    alert("Lütfen bir EKG görseli yükleyin.");
-    return;
-}
-
-/* 
-Deterministik analiz için:
-Aynı görsel → aynı sonuç üretmesi için
-dosya boyutunu matematiksel olarak kullanıyoruz.
-*/
-
-let size = file.size;
-
-// BPM hesaplama (gerçek matematiksel sabit dönüşüm)
-let bpm = 60 + (size % 40);  
-
-// HRV hesaplama
-let hrv = ((size % 100) / 1000).toFixed(3);
-
-let kategori="";
-let detay="";
-let oneriler="";
-let doktor="";
-
-if(bpm >= 60 && bpm <= 100 && hrv < 0.08){
-
-kategori="NORMAL SİNÜS RİTMİ";
-detay="Kalp ritmi fizyolojik sınırlar içerisindedir.";
-oneriler=`
-• Haftada 3-4 gün tempolu yürüyüş<br>
-• Dengeli beslenme<br>
-• Yıllık kardiyoloji kontrolü<br>
-`;
-doktor="Rutin aile hekimi kontrolü yeterlidir.";
-
-}
-else if(bpm > 100){
-
-kategori="TAŞİKARDİ EĞİLİMİ";
-detay="Kalp atım hızı normal sınırın üzerindedir.";
-oneriler=`
-• Kafein azaltılmalı<br>
-• Günlük su tüketimi artırılmalı<br>
-• Stres yönetimi yapılmalı<br>
-`;
-doktor="Kardiyoloji uzmanına başvurulması önerilir.";
-
-}
-else if(hrv >= 0.08){
-
-kategori="RİTİM DÜZENSİZLİĞİ ŞÜPHESİ";
-detay="RR interval değişkenliği artmış olabilir.";
-oneriler=`
-• 24 saat Holter EKG önerilir<br>
-• Çarpıntı varsa gecikmeden değerlendirme yapılmalı<br>
-`;
-doktor="Kardiyoloji uzmanına başvurulmalıdır.";
-
-}
-else if(bpm < 60){
-
-kategori="BRADİKARDİ EĞİLİMİ";
-detay="Kalp atım hızı düşük tespit edilmiştir.";
-oneriler=`
-• Halsizlik varsa kontrol önerilir<br>
-• Tiroit testleri değerlendirilebilir<br>
-`;
-doktor="Kardiyoloji uzmanına danışılmalıdır.";
-
-}
-
-document.getElementById("output").innerHTML=`
-<h2 style="color:gold;">--- KLİNİK DESTEK RAPORU ---</h2>
-
-<p><b>Ortalama BPM:</b> <span style="color:#c40000;">${bpm}</span></p>
-<p><b>HRV:</b> ${hrv}</p>
-
-<hr>
-
-<h3 style="color:#c40000;">Risk Kategorisi: ${kategori}</h3>
-
-<p>${detay}</p>
-
-<h3 style="color:gold;">Öneriler:</h3>
-<p>${oneriler}</p>
-
-<h3 style="color:#c40000;">Uzman Yönlendirme:</h3>
-<p>${doktor}</p>
-
-<br>
-<small>
-⚠️ Bu sistem erken risk değerlendirme amaçlı geliştirilmiştir.
-Kesin teşhis için sağlık kuruluşuna başvurulmalıdır.
-</small>
-`;
-
-}
-
-</script>
+<footer>
+© 2026 Muhammed Ekrem Özer<br>
+Tüm yazılım, tasarım ve algoritma hakları proje sahibine aittir.<br>
+İzinsiz kopyalanamaz ve çoğaltılamaz.
+</footer>
 
 </body>
 </html>
