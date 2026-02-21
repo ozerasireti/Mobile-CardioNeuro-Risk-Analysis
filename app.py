@@ -1,33 +1,45 @@
 import streamlit as st
-import cv2
 import numpy as np
-from PIL import Image
+import matplotlib.pyplot as plt
+from scipy.signal import find_peaks
 
-st.title("Cardio-Neuro ECG Risk Analysis")
+st.set_page_config(page_title="ZGL NeuroVision Demo", layout="wide")
 
-st.write("Upload an ECG image for rhythm analysis.")
-st.write("⚠️ Not a medical diagnosis system.")
+st.title("ZGL NeuroVision - Cardio Analysis Demo")
+st.markdown("Muhammed Ekrem Özer tarafından geliştirilmiştir.")
 
-uploaded_file = st.file_uploader("Upload ECG Image", type=["png","jpg","jpeg"])
+# Simulated PPG signal
+fs = 100  # sampling frequency
+t = np.linspace(0, 10, fs*10)
+heart_rate = 75
+signal = 0.6 * np.sin(2 * np.pi * heart_rate/60 * t) + 0.05 * np.random.randn(len(t))
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    img = np.array(image)
+# Peak detection
+peaks, _ = find_peaks(signal, distance=fs*(60/heart_rate)/2)
+rr_intervals = np.diff(peaks) / fs
 
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray, (5,5), 0)
-    edges = cv2.Canny(blur, 50, 150)
+if len(rr_intervals) > 0:
+    bpm = 60 / np.mean(rr_intervals)
+    hrv = np.std(rr_intervals)
+else:
+    bpm = 0
+    hrv = 0
 
-    signal_variation = np.std(edges)
+# Risk evaluation
+if bpm > 100:
+    risk = "Tachycardia Risk"
+elif bpm < 50:
+    risk = "Bradycardia Risk"
+else:
+    risk = "Normal Range"
 
-    st.image(image, caption="Uploaded ECG", use_column_width=True)
-    st.image(edges, caption="Edge Detection", use_column_width=True)
+col1, col2, col3 = st.columns(3)
+col1.metric("BPM", f"{bpm:.1f}")
+col2.metric("HRV", f"{hrv:.4f}")
+col3.metric("Status", risk)
 
-    st.subheader("Analysis Result")
-
-    if signal_variation < 20:
-        st.success("Low Risk - Rhythm appears regular")
-    elif signal_variation < 40:
-        st.warning("Moderate Risk - Possible irregularity")
-    else:
-        st.error("High Risk - Irregular rhythm indicator")
+fig, ax = plt.subplots()
+ax.plot(t, signal)
+ax.plot(t[peaks], signal[peaks], "ro")
+ax.set_title("Simulated PPG Signal")
+st.pyplot(fig)
